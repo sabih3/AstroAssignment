@@ -1,6 +1,7 @@
 package ahmed.sabih.com.astroassignment.utils;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -46,7 +47,34 @@ public class UIUtils {
     public static void showSnackBar(CoordinatorLayout coordinatorLayout,
                                     String message) {
 
-        Snackbar.make(coordinatorLayout,message,Snackbar.LENGTH_LONG).show();
+        Snackbar snackBar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG);
+        View view = snackBar.getView();
+        TextView tv = view.findViewById(android.support.design.R.id.snackbar_text);
+        tv.setTextColor(Color.WHITE);
+        snackBar.show();
+    }
 
+    public static void showSnackBar(CoordinatorLayout coordinatorLayout,
+                                    String message, String actionTitle,
+                                    final SnackBarActionListener listener) {
+
+        Snackbar snackBar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_INDEFINITE).
+                            setAction(actionTitle, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onSnackBarAction();
+            }
+        });
+
+        snackBar.setActionTextColor(Color.WHITE);
+        View view = snackBar.getView();
+
+        TextView tv = view.findViewById(android.support.design.R.id.snackbar_text);
+        tv.setTextColor(Color.WHITE);
+        snackBar.show();
+    }
+
+    public interface SnackBarActionListener{
+        void onSnackBarAction();
     }
 }

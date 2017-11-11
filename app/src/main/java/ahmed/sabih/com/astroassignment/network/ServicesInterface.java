@@ -18,6 +18,7 @@ public interface ServicesInterface {
     @GET(Endpoints.CHANNELS_LIST)
     Call<ChannelListResponse> getChannelsList();
 
+    @GET(Endpoints.CHANNEL_DESC)
     Call<ChannelDescResponse> getChannels();
 
 

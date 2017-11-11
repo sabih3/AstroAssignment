@@ -12,6 +12,7 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
 import ahmed.sabih.com.astroassignment.models.Channel;
+import ahmed.sabih.com.astroassignment.models.DescriptiveChannel;
 
 /**
  * Created by sabih on 03-Nov-17.
@@ -21,11 +22,13 @@ public class DBHelper extends OrmLiteSqliteOpenHelper{
 
     private static String TAG = DBHelper.class.getSimpleName();
     private static String DATABASE_NAME = "astro-assignment";
-    private static int DATABASE_VERSION = 3;
+    private static int DATABASE_VERSION = 4;
     private Dao<Channel,Integer> channelDAO;
+    private Dao<DescriptiveChannel,Integer> descriptiveChannelDAO;
 
     private static final Class<?> [] TABLES = {
-            Channel.class
+            Channel.class,
+            DescriptiveChannel.class
     };
 
 
@@ -37,6 +40,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper{
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
             TableUtils.createTable(connectionSource,TABLES[0]);
+            TableUtils.createTable(connectionSource,TABLES[1]);
         }catch (SQLException exc){
             Log.e(TAG,"Error in table creation");
         }
@@ -47,12 +51,15 @@ public class DBHelper extends OrmLiteSqliteOpenHelper{
         if(newVersion > oldVersion){
             try {
                 TableUtils.dropTable(connectionSource,TABLES[0],false);
+                TableUtils.dropTable(connectionSource,TABLES[1],false);
+
             } catch (SQLException exc) {
                 Log.e(TAG,"Update DB: Error in dropping table");
             }
 
             try {
                 TableUtils.createTable(connectionSource,TABLES[0]);
+                TableUtils.createTable(connectionSource,TABLES[1]);
             }catch (SQLException exc){
                 Log.e(TAG,"Update DB: Error in table creation");
             }
@@ -70,5 +77,18 @@ public class DBHelper extends OrmLiteSqliteOpenHelper{
         }
 
         return channelDAO;
+    }
+
+    public Dao<DescriptiveChannel,Integer> getDescChannelDao(){
+        if(descriptiveChannelDAO == null){
+
+            try {
+                descriptiveChannelDAO = getDao(DescriptiveChannel.class);
+            }catch (SQLException exc){
+                Log.e(TAG,"Error fetching Desc CHANNEL DAO");
+            }
+        }
+
+        return descriptiveChannelDAO;
     }
 }

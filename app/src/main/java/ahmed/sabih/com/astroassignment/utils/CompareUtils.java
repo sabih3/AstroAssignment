@@ -3,6 +3,7 @@ package ahmed.sabih.com.astroassignment.utils;
 import java.util.Comparator;
 
 import ahmed.sabih.com.astroassignment.models.Channel;
+import ahmed.sabih.com.astroassignment.models.DescriptiveChannel;
 
 /**
  * Created by sabih on 02-Nov-17.
@@ -28,6 +29,18 @@ public class CompareUtils {
 
             int channelStbNumber1 = channel.getChannelStbNumber();
             int channelStbNumber2 = channel2.getChannelStbNumber();
+
+            return channelStbNumber1 - channelStbNumber2;
+        }
+    };
+
+
+    public static Comparator<DescriptiveChannel> channelDescNumberComparator = new Comparator<DescriptiveChannel>() {
+        @Override
+        public int compare(DescriptiveChannel channel, DescriptiveChannel channel2) {
+
+            int channelStbNumber1 = Integer.parseInt(channel.getChannelStbNumber());
+            int channelStbNumber2 = Integer.parseInt(channel2.getChannelStbNumber());
 
             return channelStbNumber1 - channelStbNumber2;
         }

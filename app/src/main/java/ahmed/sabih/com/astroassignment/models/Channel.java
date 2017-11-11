@@ -48,7 +48,6 @@ public class Channel implements Comparable, Serializable {
 
     public interface Columns{
         String TABLENAME_FAVOURITES = "favourite_channels";
-        String FAVOURITE_ID = "id";
         String CHANNEL_ID="channel_id";
         String CHANNEL_NAME = "channel_name";
         String CHANNEL_NUMBER = "channel_number";

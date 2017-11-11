@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_guide_coordinator"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/tv_guide_parent_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--Channels Layout Start-->
+        <LinearLayout
+            android:id="@+id/channel_list_parent"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="Channels"
+                android:background="@drawable/grey_box_background"/>
+            <!--Channel List Layout Start-->
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/channel_list_scroller"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/channel_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
+            <!--Channel List Layout Ends-->
+        </LinearLayout>
+        <!--Channels Layout Ends-->
+
+        <!--Single Parent of time slots & Events -->
+        <LinearLayout
+            android:layout_toRightOf="@+id/channel_list_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--Time Slots Layout Start-->
+            <HorizontalScrollView
+                android:id="@+id/horizontal_scroll_time_slots"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:id="@+id/time_slots_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="240px"
+                        android:layout_height="40dp"
+                        android:text="12AM"/>
+                    </LinearLayout>
+            </HorizontalScrollView>
+            <!--Time Slots Layout Ends-->
+
+            <!--Events Layout start-->
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/vertical_scroll_events"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <HorizontalScrollView
+                    android:id="@+id/horizontal_scroll_events"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none">
+                    <LinearLayout
+                        android:id="@+id/events_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </android.support.v4.widget.NestedScrollView>
+            <!--Events Layout End-->
+        </LinearLayout>
+        <!--Parent of time slots & Events Ends-->
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="@dimen/width_progressBar"
+            android:layout_height="@dimen/height_progressBar"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

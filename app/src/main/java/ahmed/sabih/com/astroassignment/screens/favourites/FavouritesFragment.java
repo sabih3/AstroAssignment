@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
 import ahmed.sabih.com.astroassignment.R;
@@ -51,6 +53,7 @@ public class FavouritesFragment extends Fragment implements FavouritesView{
 
     @Override
     public void onFavouritesFetched(List<Channel> allFavouritesList) {
+        Gson gson = new Gson();
         showDataInListView(allFavouritesList);
     }
 
