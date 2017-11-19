@@ -16,6 +16,7 @@ import retrofit2.Response;
 
 /**
  * Created by sabih on 01-Nov-17.
+ * ahmed.engr90@gmail.com
  */
 
 public class ChannelListBAL {

@@ -180,7 +180,7 @@ public class TVGuideFragment extends Fragment implements TVGuideView{
         for(DescriptiveChannel channel : channelsList){
 
             channelListLayout.addView(TVGuideHelper.getChannelNameRow(getContext(),
-                    channel,channelListLayout));
+                                      channel,channelListLayout));
 
             ArrayList<EventsResponse.Getevent> sortedEvents =
                     TVGuideHelper.getEventsForParticularChannel(channel, eventsList);

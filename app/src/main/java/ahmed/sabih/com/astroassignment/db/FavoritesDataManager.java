@@ -11,12 +11,17 @@ import ahmed.sabih.com.astroassignment.models.Channel;
 
 /**
  * Created by sabih on 03-Nov-17.
+ * ahmed.engr90@gmail.com
  */
 
 public class FavoritesDataManager {
 
     private static String TAG = "FavoritesDataManager";
 
+    /**Method to get favourite channels
+     *
+     * @return
+     */
     public static List<Channel> getAllFavourites() {
         List<Channel> favChannelsList = new ArrayList<>();
         try {
@@ -28,6 +33,11 @@ public class FavoritesDataManager {
         return favChannelsList;
     }
 
+    /**Method to check if passed channel already exists in favourites
+     *
+     * @param channel
+     * @return
+     */
     public static boolean checkIfChannelIsFavourite(Channel channel) {
         Channel existingChannel = null;
         try {
@@ -40,6 +50,10 @@ public class FavoritesDataManager {
         return existingChannel == null ? false: true;
     }
 
+    /**Removes channel from favourite if exists
+     *
+     * @param channel
+     */
     public static void removeChannelAsFavourite(Channel channel) {
         try {
             DBManager.getInstance().getDBHelper().getChannelDAO().delete(channel);
@@ -48,6 +62,10 @@ public class FavoritesDataManager {
         }
     }
 
+    /**Sets channel as favourite
+     *
+     * @param channel
+     */
     public static void setChannelAsFavourite(Channel channel) {
         try {
             DBManager.getInstance().getDBHelper().getChannelDAO().createOrUpdate(channel);

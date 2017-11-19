@@ -4,8 +4,12 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,7 +27,7 @@ import ahmed.sabih.com.astroassignment.models.EventsResponse;
 
 public class TVGuideHelper {
 
-    public static final int HEIGHT_CONSISTENT_PX = 240;
+    public static final int HEIGHT_CONSISTENT_PX = 280;
     public static final int HEIGHT_CHANNEL_NAME_PX = HEIGHT_CONSISTENT_PX;
     public static final int HEIGHT_EVENT_ROW_PX = HEIGHT_CHANNEL_NAME_PX;
     public static final int WIDTH_TIME_SLOT_PX = 600;
@@ -70,29 +74,109 @@ public class TVGuideHelper {
         return widthOfEvent;
     }
 
-    public static LinearLayout getEventsRow(Context context, ArrayList<EventsResponse.Getevent> eventsList) {
+    public static LinearLayout getEventsRow(Context context,
+                                            ArrayList<EventsResponse.Getevent> eventsList) {
 
         LinearLayout eventRowLayout = new LinearLayout(context);
+        eventRowLayout.removeAllViews();
         eventRowLayout.setOrientation(LinearLayout.HORIZONTAL);
-        for(EventsResponse.Getevent event : eventsList){
-            String programmeTitle = event.getProgrammeTitle();
-            String displayTime = getFormattedTime(event.getDisplayDateTime());
-            int widthOfEvent = getWidthOfEvent(event);
 
-            View view = LayoutInflater.from(context).inflate(R.layout.tv_event_name, null, false);
-            TextView tvEventName = view.findViewById(R.id.tv_event_name);
+        for(int i=0; i<eventsList.size(); i++){
+            EventsResponse.Getevent event = eventsList.get(i);
 
-            tvEventName.setHeight(HEIGHT_EVENT_ROW_PX);
-            tvEventName.setWidth(widthOfEvent);
-            tvEventName.setMaxWidth(widthOfEvent);
-            tvEventName.setBackground(ContextCompat.getDrawable(context, R.drawable.border_tv_guide));
+            if(i==0){
+                //check the first event always, as 1st event is sometimes not starting from 00:00
+                //which makes the guide not accurate
 
-            tvEventName.setText(programmeTitle+"\n"
-                                +displayTime);
+                if(!getTime(event.getDisplayDateTime()).equals("00:00")){
+
+                    // calculate the difference in minutes
+                    // create width of row = minutes times 10 ; (as 1 minute = 10px)
+                    // add row, thats it
+                    String time = getTime(event.getDisplayDateTime());
+                    String[] actualTime = time.split(":");
+                    int hrs = Integer.parseInt(actualTime[0]);
+                    int mins = Integer.parseInt(actualTime[1]);
+
+                    int durationInMins = (60*hrs)+mins;
+                    int widthOfEmptySlot = durationInMins * 10;
+                    String programmeTitleEmpty = "";
+                    String displayTimeEmpty = "";
+
+
+                    View view = LayoutInflater.from(context).inflate(R.layout.tv_event_name, null, false);
+                    TextView tvEventName = view.findViewById(R.id.tv_event_name);
+
+                    tvEventName.setHeight(HEIGHT_EVENT_ROW_PX);
+                    tvEventName.setWidth(widthOfEmptySlot);
+                    tvEventName.setMaxWidth(widthOfEmptySlot);
+                    tvEventName.setBackground(ContextCompat.getDrawable(context, R.drawable.border_tv_guide));
+
+                    tvEventName.setText(programmeTitleEmpty+"\n"
+                            +displayTimeEmpty);
+                    eventRowLayout.addView(tvEventName);
+
+
+                    String programmeTitle = event.getProgrammeTitle();
+                    String displayTime = getFormattedTime(event.getDisplayDateTime());
+                    int widthOfEvent = getWidthOfEvent(event);
+
+                    View actualLayout = LayoutInflater.from(context).inflate(R.layout.tv_event_name, null, false);
+                    TextView tvEventNameActual = actualLayout.findViewById(R.id.tv_event_name);
+
+                    tvEventNameActual.setHeight(HEIGHT_EVENT_ROW_PX);
+                    tvEventNameActual.setWidth(widthOfEvent);
+                    tvEventNameActual.setMaxWidth(widthOfEvent);
+                    tvEventNameActual.setBackground(ContextCompat.getDrawable(context, R.drawable.border_tv_guide));
+
+                    tvEventNameActual.setText(programmeTitle+"\n"
+                            +displayTime);
+
+
+                    eventRowLayout.addView(tvEventNameActual);
+                }else{
+                    // do normal work
+                    String programmeTitle = event.getProgrammeTitle();
+                    String displayTime = getFormattedTime(event.getDisplayDateTime());
+                    int widthOfEvent = getWidthOfEvent(event);
+
+                    View view = LayoutInflater.from(context).inflate(R.layout.tv_event_name, null, false);
+                    TextView tvEventName = view.findViewById(R.id.tv_event_name);
+
+                    tvEventName.setHeight(HEIGHT_EVENT_ROW_PX);
+                    tvEventName.setWidth(widthOfEvent);
+                    tvEventName.setMaxWidth(widthOfEvent);
+                    tvEventName.setBackground(ContextCompat.getDrawable(context, R.drawable.border_tv_guide));
+
+                    tvEventName.setText(programmeTitle+"\n"
+                            +displayTime);
 
 
 
-            eventRowLayout.addView(tvEventName);
+                    eventRowLayout.addView(tvEventName);
+                }
+            }else{
+                //do work normally
+                String programmeTitle = event.getProgrammeTitle();
+                String displayTime = getFormattedTime(event.getDisplayDateTime());
+                int widthOfEvent = getWidthOfEvent(event);
+
+                View view = LayoutInflater.from(context).inflate(R.layout.tv_event_name, null, false);
+                TextView tvEventName = view.findViewById(R.id.tv_event_name);
+
+                tvEventName.setHeight(HEIGHT_EVENT_ROW_PX);
+                tvEventName.setWidth(widthOfEvent);
+                tvEventName.setMaxWidth(widthOfEvent);
+                tvEventName.setBackground(ContextCompat.getDrawable(context, R.drawable.border_tv_guide));
+
+                tvEventName.setText(programmeTitle+"\n"
+                        +displayTime);
+
+
+
+                eventRowLayout.addView(tvEventName);
+            }
+
         }
 
         return eventRowLayout;
@@ -113,15 +197,45 @@ public class TVGuideHelper {
         return time;
     }
 
+    private static String getTime(String displayDateTime) {
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat requiredFormat = new SimpleDateFormat("HH:mm");
+        String time = "";
+        try {
+            Date date = inputDateFormat.parse(displayDateTime);
+            time = requiredFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        return time;
+    }
+
     public static View getChannelNameRow(Context context, DescriptiveChannel channel,
                                          LinearLayout channelListLayout) {
-        TextView tvChannelName = new TextView(context);
+        View row = LayoutInflater.from(context).inflate(R.layout.row_channel_name, null, false);
+        LinearLayout rowParent = (LinearLayout) row.findViewById(R.id.channel_name_parent);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(channelListLayout.getWidth(),HEIGHT_CHANNEL_NAME_PX);
+        rowParent.setLayoutParams(params);
+
+        ImageView imageView = (ImageView) row.findViewById(R.id.channel_logo);
+
+        TextView tvChannelName = (TextView)row.findViewById(R.id.tvGuide_channel_name);
+
+        Picasso.with(context).load(channel.getChannelLogo()).into(imageView);
+
+        //TextView tvChannelName = new TextView(context);
         tvChannelName.setText(channel.getChannelTitle()+"\n"+
                               "CH "+channel.getChannelStbNumber());
-        tvChannelName.setWidth(channelListLayout.getWidth());
-        tvChannelName.setHeight(HEIGHT_CHANNEL_NAME_PX);
-        tvChannelName.setBackground(ContextCompat.getDrawable(context,R.drawable.border_tv_guide));
+        tvChannelName.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-    return tvChannelName;
+        tvChannelName.setWidth(channelListLayout.getWidth());
+        //tvChannelName.setHeight(HEIGHT_CHANNEL_NAME_PX);
+
+        row.setBackground(ContextCompat.getDrawable(context,R.drawable.border_tv_guide));
+
+    return row;
     }
 }

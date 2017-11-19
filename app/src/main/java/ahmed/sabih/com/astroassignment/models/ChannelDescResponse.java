@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by sabih on 06-Nov-17.
+ * ahmed.engr90@gmail.com
  */
 
 public class ChannelDescResponse {

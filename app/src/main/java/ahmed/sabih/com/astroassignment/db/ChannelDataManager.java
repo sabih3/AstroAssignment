@@ -13,12 +13,17 @@ import ahmed.sabih.com.astroassignment.models.DescriptiveChannel;
 
 /**
  * Created by sabih on 07-Nov-17.
+ * ahmed.engr90@gmail.com
  */
 
 public class ChannelDataManager {
 
     public static String TAG = "ChannelDataManager";
 
+    /**Method to Persist channels in db
+     *
+     * @param channelDescList
+     */
     public static void persistChannels(ArrayList<DescriptiveChannel> channelDescList) {
 
         for(DescriptiveChannel channel: channelDescList) {
@@ -47,6 +52,10 @@ public class ChannelDataManager {
 
     }
 
+    /**Method to return all persisted channels
+     *
+     * @return
+     */
     public static List<DescriptiveChannel> getAllChannels() {
         List<DescriptiveChannel> descChannelsList = new ArrayList<>();
 
@@ -59,11 +68,15 @@ public class ChannelDataManager {
         return descChannelsList;
     }
 
-    public static List<DescriptiveChannel> getAllPaginatedChannels() {
+    /**Method to get certain number of channels
+     *
+     * @return
+     */
+    public static List<DescriptiveChannel> getPaginatedChannels() {
         List<DescriptiveChannel> records = new ArrayList<>();
         Dao<DescriptiveChannel, Integer> descChannelDao = DBManager.getInstance().getDBHelper().getDescChannelDao();
         QueryBuilder<DescriptiveChannel,Integer > queryBuilder =descChannelDao.queryBuilder();
-        queryBuilder.limit(10);
+        queryBuilder.limit(20);
         queryBuilder.orderBy(DescriptiveChannel.Columns.CHANNEL_NUMBER,true);
         try {
             records = descChannelDao.query(queryBuilder.prepare());

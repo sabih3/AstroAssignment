@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by sabih on 01-Nov-17.
+ * ahmed.engr90@gmail.com
  */
 
 public class ChannelsListAdapter extends RecyclerView.Adapter<ChannelsListAdapter.
@@ -107,6 +108,11 @@ public class ChannelsListAdapter extends RecyclerView.Adapter<ChannelsListAdapte
     }
 
 
+    /** Method responsible for marking channel as favourite
+     *
+     * @param mHolder
+     * @param channel
+     */
     private void updateFavouriteInDB(ChannelListHolder mHolder, Channel channel) {
 
         if(FavoritesDataManager.checkIfChannelIsFavourite(channel)){

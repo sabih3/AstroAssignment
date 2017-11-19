@@ -9,13 +9,12 @@ import java.io.Serializable;
 
 /**
  * Created by sabih on 03-Nov-17.
+ * ahmed.engr90@gmail.com
  */
 
 @DatabaseTable(tableName = Channel.Columns.TABLENAME_FAVOURITES)
 public class Channel implements Comparable, Serializable {
 
-//    @DatabaseField(id = true,unique = true, columnName = Columns.FAVOURITE_ID)
-//    public int favouriteID;
 
     @DatabaseField(id = true,unique = true,columnName = Columns.CHANNEL_ID)
     public int channelId;

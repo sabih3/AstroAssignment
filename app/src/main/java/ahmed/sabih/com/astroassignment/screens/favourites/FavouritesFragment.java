@@ -9,26 +9,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.Gson;
-
 import java.util.List;
 
 import ahmed.sabih.com.astroassignment.R;
 import ahmed.sabih.com.astroassignment.adapters.FavouritesAdapter;
 import ahmed.sabih.com.astroassignment.db.FavoritesDataManager;
 import ahmed.sabih.com.astroassignment.models.Channel;
+import ahmed.sabih.com.astroassignment.utils.UIUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
+/** Class used to display Favourites Channels in list
  *
  */
-public class FavouritesFragment extends Fragment implements FavouritesView{
+public class FavouritesFragment extends Fragment implements FavouritesView,
+                                                 FavouritesAdapter.onFavouriteClickListener{
 
     private View rootView;
     @BindView(R.id.fav_list)RecyclerView favouritesList;
+    private FavouritesPresenter presenter;
+    private FavouritesAdapter favouriteAdapter;
+    private List<Channel> favouritesDataset;
 
-    FavouritesPresenter presenter;
     public FavouritesFragment() {
         // Required empty public constructor
     }
@@ -53,14 +55,38 @@ public class FavouritesFragment extends Fragment implements FavouritesView{
 
     @Override
     public void onFavouritesFetched(List<Channel> allFavouritesList) {
-        Gson gson = new Gson();
         showDataInListView(allFavouritesList);
     }
 
     private void showDataInListView(List<Channel> allFavouritesList) {
-
-        FavouritesAdapter adapter = new FavouritesAdapter(allFavouritesList);
+        favouritesDataset = allFavouritesList;
+        favouriteAdapter = new FavouritesAdapter(favouritesDataset);
+        favouriteAdapter.setFavouriteClickListener(FavouritesFragment.this);
         favouritesList.setLayoutManager(new LinearLayoutManager(getContext()));
-        favouritesList.setAdapter(adapter);
+        favouritesList.setAdapter(favouriteAdapter);
+    }
+
+    @Override
+    public void onFavouriteRemoved(final Channel channel) {
+        String message = getResources().getString(R.string.msg_remove_fav);
+        String positiveBtn= getResources().getString(R.string.btn_positive);
+        String negaveBtn = getResources().getString(R.string.btn_negavtive);
+
+        UIUtils.showMessageDialog(getContext(), message, positiveBtn, negaveBtn, new UIUtils.DialogButtonListener() {
+            @Override
+            public void onPositiveButtonClicked() {
+                favouritesDataset.remove(channel);
+                FavoritesDataManager.removeChannelAsFavourite(channel);
+                favouriteAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNegativeButtonClicked() {
+
+            }
+        });
+
+
+
     }
 }

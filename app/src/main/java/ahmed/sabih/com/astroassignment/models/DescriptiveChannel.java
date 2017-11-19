@@ -13,6 +13,7 @@ import static ahmed.sabih.com.astroassignment.models.DescriptiveChannel.Columns.
 
 /**
  * Created by sabih on 06-Nov-17.
+ * ahmed.engr90@gmail.com
  */
 
 @DatabaseTable(tableName = DescriptiveChannel.Columns.TABLE_NAME)

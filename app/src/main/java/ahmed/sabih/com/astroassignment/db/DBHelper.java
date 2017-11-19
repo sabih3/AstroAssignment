@@ -16,6 +16,7 @@ import ahmed.sabih.com.astroassignment.models.DescriptiveChannel;
 
 /**
  * Created by sabih on 03-Nov-17.
+ * ahmed.engr90@gmail.com
  */
 
 public class DBHelper extends OrmLiteSqliteOpenHelper{

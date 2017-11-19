@@ -53,8 +53,9 @@ public class TVGuidePresenter {
         String periodEnd = periodDate +" "+ endTime;
         //Refactor Block end
 
+        //If Channels exists in DB, query channels from db, to get channel IDs for fetching events
         if(!ChannelDataManager.getAllChannels().isEmpty()){
-            final List<DescriptiveChannel> allChannels = ChannelDataManager.getAllPaginatedChannels();
+            final List<DescriptiveChannel> allChannels = ChannelDataManager.getPaginatedChannels();
             ArrayList<String> channelIDsList = new ArrayList<>();
 
 
@@ -68,7 +69,6 @@ public class TVGuidePresenter {
             String channelIDs = TextUtils.join(",", channelIDsList);
 
             tvGuideView.showProgress();
-            //Todo: show progress here with message that fetching channels events
             TVGuideBAL.fetchEvents(mContext,periodStart,periodEnd,channelIDs, new TVGuideBAL.TVGuideListener() {
                 @Override
                 public void onEventsFetched(Response<EventsResponse> response) {
@@ -88,7 +88,7 @@ public class TVGuidePresenter {
                 }
             });
         }else{
-            //Todo: show progress here with message that preparing channels for events
+            //If channels are not in DB, fetch channels first
             tvGuideView.showProgress();
             fetchChannelDesc();
 

@@ -6,4 +6,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_retry">RETRY</string>
+    <string name="msg_remove_fav">Are you sure to remove this as Favourite Channel?</string>
+    <string name="btn_positive">Yes</string>
+    <string name="btn_negavtive">No</string>
 </resources>
